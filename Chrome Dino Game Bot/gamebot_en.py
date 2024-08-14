@@ -14,76 +14,44 @@ time.sleep(1)
 body = driver.find_element("xpath", "//body")
 body.send_keys(Keys.SPACE)
 
-
-
 while True:
     try:
-        # close tab when "p" is pressed
+
+        # Close the tab when "p" is pressed
         if keyboard.is_pressed('p'):
-            #print("Quitting The Game...")
             driver.quit()
             break
         
-        # get dino positions 
+        # Get dino and obstacle positions
         dino_position = driver.execute_script("return Runner.instance_.tRex.xPos;")
         obstacles = driver.execute_script("return Runner.instance_.horizon.obstacles;")
-
-        # get the speed of t-rex
         current_speed = driver.execute_script("return Runner.instance_.currentSpeed;")
-        
-        #print(f"Current Speed: {current_speed:.1f}")  # to check current speed
 
-        if obstacles: #gather some obstacle data if obstacles exists
+        if obstacles:
             obstacle = obstacles[0]
             obstacle_position = obstacle['xPos']
-            obstacle_y_position = obstacle['yPos']  
+            obstacle_y_position = obstacle['yPos']
             obstacle_type = obstacle['typeConfig']['type']
-            obstacle_height = obstacle['typeConfig']['height']
-            obstacle_width = obstacle['typeConfig']['width']
 
-            #print(f"Obstacle Type: {obstacle_type}, Height: {obstacle_height}, Width: {obstacle_width}") #to check obstacle info
+            # Determine jump position based on speed and number of obstacles will be on the screen
 
-            if 6 <= current_speed <= 8:     
+            if 6 <= current_speed <= 8:
+                jump_position = 155 if len(obstacles) > 1 else 120
 
-                 #print(f"6-8 {obstacle_type} {current_speed:.2f}")      
-                 
-                 specific_position_to_jump = 152  #because there are some obstacles with a small gap between them so t-rex should jump earlier
-    
-                 if obstacle_position <= specific_position_to_jump and obstacle_y_position != 50:   # if obstacle_y_position == 50 means there is a PTERODACTY higher than t-rex so we don't need to jump 
-                    
-                    #print(f"{obstacle_position}") to check how far is the obstacle
+            elif 8 < current_speed <= 11:
+                jump_position = 145 if len(obstacles) > 1 else 125
 
-                    body.send_keys(Keys.SPACE)
-                    time.sleep(0.1)
-                    body.send_keys(Keys.NULL)
+            else:
+                jump_position = 190
+            
+            # Check if it's time to jump
 
-            if 8 < current_speed <= 11:
-
-                #print(f"8-11 {obstacle_type} {current_speed:.2f}") to check     
-                
-                specific_position_to_jump = 147 # no more small gaps between obstacles but there might be multiple large cactuses 
-    
-                if obstacle_position <= specific_position_to_jump and obstacle_y_position != 50:   
-                   
-                   #print(f"{obstacle_position} uzaklıktan zıplanıyor.")
-                   body.send_keys(Keys.SPACE)
-                   time.sleep(0.1)
-                   body.send_keys(Keys.NULL)         
-    
-
-            elif current_speed > 11: 
-
-                specific_position_to_jump = 190 
-
-                if obstacle_position <= specific_position_to_jump and obstacle_y_position != 50:
-
-                    #print(f"High Speed. Obstacle Position: {obstacle_position}, Time to Sleep: {time_to_sleep}") #to check
-
-                    body.send_keys(Keys.SPACE)
-                    time.sleep(0.5)
-                    body.send_keys(Keys.NULL)
-
-        # wait a while 
+            if obstacle_position <= jump_position and obstacle_y_position != 50:
+                body.send_keys(Keys.SPACE)
+                time.sleep(0.1 if current_speed <= 11 else 0.5)
+                body.send_keys(Keys.NULL)
+        
         time.sleep(0.01)
-    except:
-        print("")
+    
+    except Exception as e:
+        print(f"Error occurred: {e}")
