@@ -8,16 +8,16 @@ This project is a Python-based bot that plays the "Chrome Dinosaur Game" automat
 
 - Automatically detects obstacles in the Chrome Dinosaur Game.
 
-- Adjusts jump timing based on the T-Rex's current speed.
+- Adjusts jump timing based on the T-Rex's current speed and the number of obstacles.
 
-- Handles different obstacle types, including large cacti and flying pterodactyls.
+- Handles different obstacle types including flying pterodactyls.
 
 - Works flawlessly, especially when the T-Rex is quicker (approximately when the score is above 300).
 
 
 **How Can It Get Better?**
 
-- There is still room for improvement in the early-game stages.
+- Further optimization can be done for the early-game stages to improve performance under different speed conditions.
 
 
 **Installation of the Required Libraries:**
