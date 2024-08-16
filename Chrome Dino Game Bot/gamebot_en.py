@@ -46,7 +46,7 @@ while True:
             
             # Check if it's time to jump
 
-            if obstacle_position <= jump_position and obstacle_y_position != 50:
+            if obstacle_position <= jump_position and obstacle_y_position != 50: # don't jump when the obstacle is above the t-rex
                 body.send_keys(Keys.SPACE)
                 time.sleep(0.1 if current_speed <= 11 else 0.5)
                 body.send_keys(Keys.NULL)
